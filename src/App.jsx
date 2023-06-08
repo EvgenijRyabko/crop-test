@@ -80,6 +80,7 @@ function App() {
   const [output, setOutput] = useState(null);
   const modalRef = useRef();
   const imageRef = useRef();
+  const inputRef = useRef();
 
   const selectImage = (file) => {
     setSrc(URL.createObjectURL(file));
@@ -136,9 +137,17 @@ function App() {
     setOutput(base64Image);
   };
 
+  const showModal = () => {
+    setImage(null);
+    setOutput(null);
+    setSrc(null);
+    inputRef.current.value = null;
+    modalRef.current.classList.add('active');
+  }
+
   return (
     <div style={{ display: 'block' }}>
-      <button onClick={() => modalRef.current.classList.add('active')}>Click</button>
+      <button onClick={showModal}>Click</button>
       <button onClick={() => Swal.fire({
         imageUrl: output
       })}>Show image</button>
@@ -146,7 +155,7 @@ function App() {
         <div className="modal-dialog">
           <div className="modal-content">
             <div className="modal-header">
-              <input type='file' accept='image/*' onChange={(e) => {
+              <input ref={inputRef} type='file' accept='image/*' onChange={(e) => {
                 selectImage(e.target.files[0]);
               }} />
               <button className="close" onClick={() => modalRef.current.classList.remove('active')}>×</button>
